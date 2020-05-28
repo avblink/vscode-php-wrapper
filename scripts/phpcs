@@ -1,0 +1,13 @@
+#!/bin/sh
+
+docker run \
+    --rm \
+    -i \
+    -v `pwd`:`pwd` \
+    -w `pwd` \
+    avblink/vscode-php-wrapper \
+    phpcs --standard=~/.composer/vendor/drupal/coder/coder_sniffer/Drupal "$@"
+
+exit $?
+
+#/root/.composer/vendor/bin/phpcs --standard=~/.composer/vendor/drupal/coder/coder_sniffer/Drupal

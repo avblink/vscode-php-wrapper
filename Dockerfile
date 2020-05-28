@@ -10,4 +10,17 @@ RUN set -ex \
 	&& curl -fSL "https://github.com/FriendsOfPHP/PHP-CS-Fixer/releases/download/$FIXER_VERSION/php-cs-fixer.phar" -o php-cs-fixer \
     && chmod a+x php-cs-fixer
 
+#Install composer
+RUN php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');" ; \
+    php composer-setup.php \
+    php -r "unlink('composer-setup.php');" ; \
+	mv composer.phar /usr/local/bin/composer
+
+# Add Drupal coding standards
+RUN composer global require drupal/coder    
+RUN ln -s ~/.composer/vendor/drupal/coder/coder_sniffer/Drupal ~/.composer/vendor/squizlabs/php_codesniffer/src/Standards/Drupal \
+    ln -s ~/.composer/vendor/drupal/coder/coder_sniffer/DrupalPractice ~/.composer/vendor/squizlabs/php_codesniffer/src/Standards/DrupalPractice
+RUN ln -s /root/.composer/vendor/squizlabs/php_codesniffer/bin/phpcs /usr/bin/phpcs
+RUN ln -s /root/.composer/vendor/squizlabs/php_codesniffer/bin/phpcbf /usr/bin/phpcbf
+
 CMD ["php", "-a"]
