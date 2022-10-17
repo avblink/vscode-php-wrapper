@@ -17,9 +17,16 @@ RUN php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');" ; 
 	mv composer.phar /usr/local/bin/composer
 
 # Add Drupal coding standards
+RUN composer config --global --no-interaction allow-plugins.composer/installers true
+RUN composer config --global --no-plugins allow-plugins.dealerdirect/phpcodesniffer-composer-installer true
+
 RUN composer global require drupal/coder    
 RUN ln -s ~/.composer/vendor/drupal/coder/coder_sniffer/Drupal ~/.composer/vendor/squizlabs/php_codesniffer/src/Standards/Drupal \
     ln -s ~/.composer/vendor/drupal/coder/coder_sniffer/DrupalPractice ~/.composer/vendor/squizlabs/php_codesniffer/src/Standards/DrupalPractice
+    
+RUN composer global require wp-coding-standards/wpcs 
+RUN ln -s ~/.composer/vendor/wp-coding-standards/wpcs ~/.composer/vendor/squizlabs/php_codesniffer/src/Standards/Wordpress
+
 RUN ln -s /root/.composer/vendor/squizlabs/php_codesniffer/bin/phpcs /usr/bin/phpcs
 RUN ln -s /root/.composer/vendor/squizlabs/php_codesniffer/bin/phpcbf /usr/bin/phpcbf
 
